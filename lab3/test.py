@@ -4,14 +4,18 @@ from pygame.draw import *
 pygame.init()
 
 FPS = 30
+
 #create window
 screen = pygame.display.set_mode((600, 800))
+
 #space for drawing
 # ...
 rect(screen, (0, 0, 0), (0, 0, 600, 800))
 rect(screen, (110, 110, 110), (0, 0, 600, 300))
+
 # moon
 circle(screen,(255, 255, 255),(544, 63), 45, width=0)
+
 # chimneys below
 rect(screen, (40, 40, 40), (87, 85, 8, 60))
 rect(screen, (40, 40, 40), (200, 80, 8, 60))
@@ -21,19 +25,24 @@ ellipse(screen, (70, 70, 70), (25, 70, 490, 55))
 ellipse(screen, (90, 90, 90), (280, 50, 330, 50))
 ellipse(screen, (90, 90, 90), (400, 106, 330, 45))
 ellipse(screen, (40, 40, 40), (310, 165, 350, 45))
+
 # roof
 polygon(screen, (0, 0, 0), [(0, 170), (40, 140), (320, 140), (360, 170), (0, 170)], width=0)
+
 # wall
 rect(screen, (61, 45, 9), (30, 170, 300, 400))
+
 # windows
 rect(screen, (56, 10, 5), (60, 430, 60, 90))
 rect(screen, (54, 10, 5), (150, 430, 60, 90))
 rect(screen, (240, 190, 26), (240, 430, 60, 90))
+
 # planks
 rect(screen, (125, 106, 104), (60, 170, 30, 120))
 rect(screen, (125, 106, 104), (120, 170, 30, 120))
 rect(screen, (125, 106, 104), (210, 170, 30, 120))
 rect(screen, (125, 106, 104), (270, 170, 30, 120))
+
 # balcony
 rect(screen, (50, 50, 50), (0, 300, 360, 30))
 rect(screen, (50, 50, 50), (5, 260, 10, 40))
@@ -44,9 +53,11 @@ rect(screen, (50, 50, 50), (111, 260, 20, 40))
 rect(screen, (50, 50, 50), (170, 260, 20, 40))
 rect(screen, (50, 50, 50), (228, 260, 20, 40))
 rect(screen, (50, 50, 50), (286, 260, 20, 40))
+
 # chimneys above
 rect(screen, (40, 40, 40), (100, 70, 15, 80))
 rect(screen, (40, 40, 40), (292, 100, 8, 60))
+
 # ghost
 def draw_head(surface, x, y, size, color):
     circle(surface, color, (x, y), size, width=0)
