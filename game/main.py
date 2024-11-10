@@ -15,6 +15,7 @@ YELLOW = (255, 255, 0)
 
 # sprite of player
 class Player(pygame.sprite.Sprite):
+    # initialisation
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
         self.image = pygame.Surface((50, 40))
@@ -23,7 +24,8 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
         self.speedx = 0
-
+        
+    # drawing per iteration
     def update(self):
         self.speedx = 0
         keystate = pygame.key.get_pressed()
@@ -37,6 +39,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
             
+    # method for shooting        
     def shoot(self):
         bullet = Bullet(self.rect.centerx, self.rect.top)
         all_sprites.add(bullet)
@@ -63,7 +66,7 @@ class Mob(pygame.sprite.Sprite):
             self.rect.y = random.randrange(-100, -40)
             self.speedy = random.randrange(1, 8)
 
-# create the laser shoot gun
+# create class for observing the laser gun's hits
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
@@ -76,12 +79,12 @@ class Bullet(pygame.sprite.Sprite):
 
     def update(self):
         self.rect.y += self.speedy
-        # убить, если он заходит за верхнюю часть экрана
+        # delete whether it out of screen
         if self.rect.bottom < 0:
             self.kill()
 
 
-# Create window and game
+# Create window and game and base classes
 pygame.init()
 pygame.mixer.init()
 screen = pygame.display.set_mode((WIDTH, HEIGHT))
@@ -108,28 +111,30 @@ while running:
         # check for closing window
         if event.type == pygame.QUIT:
             running = False
-            
+        # check the player's movement    
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
                 player.speedx = -8
             if event.key == pygame.K_RIGHT:
                 player.speedx = 8
+        # check the player's shooting
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 player.shoot()
 
-    # update
+    # update all of the objects
     all_sprites.update()
     # checking if player faces with something
     hits_npc = pygame.sprite.spritecollide(player, mobs, False)
     if hits_npc:
         running = False
+    # check if player gets to comet or fighter
     hits = pygame.sprite.groupcollide(mobs, bullets, True, True)
     for hit in hits:
         m = Mob()
         all_sprites.add(m)
         mobs.add(m)
-    # Rendering
+    # Rendering screen
     screen.fill(BLACK)
     all_sprites.draw(screen)
     # flipping screen after drawing
