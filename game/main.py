@@ -1,8 +1,12 @@
+from os import path
+
+img_dir = path.join(path.dirname(__file__), 'graphics_forgame')
+
 import pygame
 import random
 
-WIDTH = 480
-HEIGHT = 600
+WIDTH = 600
+HEIGHT = 750
 FPS = 90
 
 # Imagine the colors
@@ -13,13 +17,28 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
+
+# Create window and game and base classes
+pygame.init()
+pygame.mixer.init()
+screen = pygame.display.set_mode((WIDTH, HEIGHT))
+pygame.display.set_caption("My Game")
+
+# loading background
+background = pygame.image.load(path.join(img_dir, 'starfield.png')).convert()
+background_rect = background.get_rect()
+# loading graphics for player, fighter and bullets sprite
+player_img = pygame.image.load(path.join(img_dir, "x-wing.png")).convert()
+fighter_img = pygame.image.load(path.join(img_dir, "fighter of Empire.png")).convert()
+bullet_img = pygame.image.load(path.join(img_dir, "laserGreen.png")).convert()
+
 # sprite of player
 class Player(pygame.sprite.Sprite):
     # initialisation
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((50, 40))
-        self.image.fill(GREEN)
+        self.image = player_img
+        self.image.set_colorkey(BLACK)
         self.rect = self.image.get_rect()
         self.rect.centerx = WIDTH / 2
         self.rect.bottom = HEIGHT - 10
@@ -50,8 +69,9 @@ class Player(pygame.sprite.Sprite):
 class Mob(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((30, 40))
-        self.image.fill(RED)
+        self.image = fighter_img
+        self.image.set_colorkey(BLACK)
+        self.image = pygame.transform.scale(fighter_img, (35, 35))
         self.rect = self.image.get_rect()
         self.rect.x = random.randrange(WIDTH - self.rect.width)
         self.rect.y = random.randrange(-100, -40)
@@ -70,8 +90,9 @@ class Mob(pygame.sprite.Sprite):
 class Bullet(pygame.sprite.Sprite):
     def __init__(self, x, y):
         pygame.sprite.Sprite.__init__(self)
-        self.image = pygame.Surface((10, 20))
-        self.image.fill(YELLOW)
+        self.image = bullet_img
+        self.image.set_colorkey(BLACK)
+        self.image = pygame.transform.scale(bullet_img, (5, 30))
         self.rect = self.image.get_rect()
         self.rect.bottom = y
         self.rect.centerx = x
@@ -82,14 +103,10 @@ class Bullet(pygame.sprite.Sprite):
         # delete whether it out of screen
         if self.rect.bottom < 0:
             self.kill()
-
-
-# Create window and game and base classes
-pygame.init()
-pygame.mixer.init()
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("My Game")
+            
+# install a timer
 clock = pygame.time.Clock()
+# create groups of sprites
 all_sprites = pygame.sprite.Group()
 player = Player()
 all_sprites.add(player)
@@ -99,6 +116,7 @@ for i in range(8):
     all_sprites.add(m)
     mobs.add(m)
 bullets = pygame.sprite.Group()
+
 
 # Main loop of game
 running = True
@@ -136,6 +154,7 @@ while running:
         mobs.add(m)
     # Rendering screen
     screen.fill(BLACK)
+    screen.blit(background, background_rect)
     all_sprites.draw(screen)
     # flipping screen after drawing
     pygame.display.flip()
