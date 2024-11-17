@@ -18,7 +18,7 @@ GREEN = (0, 255, 0)
 BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 
-#create class for saving
+#create class for saving information about players and record score
 class Save:
     def __init__(self):
         self.file = shelve.open('data')
@@ -103,7 +103,7 @@ class Player(pygame.sprite.Sprite):
         if self.rect.left < 0:
             self.rect.left = 0
             
-    # method for shooting        
+    # method for player's shooting        
     def shoot(self):
         bullet = Bullet(self.rect.centerx, self.rect.top)
         all_sprites.add(bullet)
@@ -136,6 +136,7 @@ class Mob(pygame.sprite.Sprite):
             self.rect.y = random.randrange(-100, -40)
             self.speedy = random.randrange(1, 8)
             
+    # function for mob's shooting in deed don't work properly       
     def shoot(self):
         if not self.cd_shoot:
             an_shoot_sound.play() 
@@ -157,7 +158,7 @@ def show_go_screen():
     waiting = True
     while waiting:
         clock.tick(FPS)
-        # starting menu 
+        # starting menu with opportunity to create a profile
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -179,14 +180,15 @@ def show_go_screen():
                         input_text += event.unicode           
         keys = pygame.key.get_pressed()
         if keys[pygame.K_TAB]:
-            need_input = True     
+            need_input = True 
+        # drawing start screen    
         screen.blit(background, background_rect)
         draw_text(screen, "STAR WARS", 64, WIDTH / 2, HEIGHT / 4)
         draw_text(screen, "Press RSHIFT to begin", 18, WIDTH / 2, HEIGHT * 3 / 4)
         draw_text(screen, input_text, 32, WIDTH/2, HEIGHT/2)
         pygame.display.flip()
             
-# class for enemy's bullets
+# class for enemy's bullets in deed don't work
 class enemybullet(pygame.sprite.Sprite):
     # class initialisation
     def __init__(self, x, y):
@@ -311,8 +313,7 @@ while running:
     # checking if player faces with something
     hits_npc = pygame.sprite.spritecollide(player, mobs, False, pygame.sprite.collide_circle)
     if hits_npc:
-        if max_cur_score < score:
-            max_cur_score = score
+        # checking if player beats the record score
         if max_score < score:
             max_score = score
             save_data.add('best_player_name', save_data.get('name'))
